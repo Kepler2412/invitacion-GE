@@ -27,7 +27,7 @@ window.CONFIG = {
 
   // Número de WhatsApp de los novios (con indicativo, solo dígitos). Ej: "573001234567"
   // Si se llena, los invitados pueden avisar su respuesta por WhatsApp.
-  WHATSAPP_NOVIOS: "",
+  WHATSAPP_NOVIOS: "573057720034",
 
   // URL del Web App de Google Apps Script (ver google-apps-script/Code.gs y README).
   // Si se llena, las confirmaciones quedan registradas automáticamente
