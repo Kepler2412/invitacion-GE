@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Panel de invitados · Germán & Evelyn</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<style>
+:root{--ink:#1d1a2b;--paper:#fbf4e6;--red:#d7262e;--gold:#f4c443;--teal:#1f7a7a;--ok:#2bb673;--muted:#6b6577;--line:#e3d8c2}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+body{font-family:"Comic Neue",system-ui,sans-serif;color:var(--ink);background:var(--paper);
+  background-image:radial-gradient(rgba(29,26,43,.06) 1px,transparent 1.3px);background-size:8px 8px;min-height:100vh}
+header{background:var(--red);color:#fff;padding:18px 16px;border-bottom:4px solid var(--ink)}
+header .in{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header h1{font:400 30px "Bangers";letter-spacing:.04em;line-height:1}
+header h1 span{font-family:"Great Vibes";font-size:28px;color:var(--gold);letter-spacing:0;margin-left:8px}
+.sync{font-size:13px;font-weight:700;background:rgba(0,0,0,.25);padding:6px 10px;border-radius:999px}
+main{max-width:1100px;margin:auto;padding:18px 14px 60px;display:grid;gap:18px}
+.card{background:#fff;border:3px solid var(--ink);border-radius:12px;box-shadow:4px 4px 0 var(--ink);padding:16px}
+.card h2{font:400 22px "Bangers";letter-spacing:.04em;margin-bottom:10px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
+.stat{background:#fff;border:3px solid var(--ink);border-radius:12px;padding:10px 12px;box-shadow:3px 3px 0 var(--ink)}
+.stat b{display:block;font:400 34px "Bangers";line-height:1}
+.stat small{font-weight:700;color:var(--muted)}
+.stat.ok b{color:var(--ok)} .stat.no b{color:var(--red)} .stat.gold{background:var(--gold)}
+form.add{display:grid;grid-template-columns:2fr 1.3fr .6fr auto;gap:10px;align-items:end}
+label{display:flex;flex-direction:column;gap:4px;font-weight:700;font-size:14px}
+input,select,textarea{font:400 16px "Comic Neue",sans-serif;padding:10px 12px;border:2px solid var(--ink);border-radius:8px;background:#fff;width:100%}
+textarea{min-height:90px;resize:vertical}
+.btn{font:700 15px "Comic Neue";border:2px solid var(--ink);border-radius:999px;padding:9px 16px;cursor:pointer;background:#fff;
+  box-shadow:2px 2px 0 var(--ink);white-space:nowrap;display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--ink)}
+.btn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--ink)}
+.btn.primary{background:var(--red);color:#fff}
+.btn.wa{background:#25d366;color:#fff}
+.btn.gold{background:var(--gold)}
+.btn.sm{padding:6px 10px;font-size:13px}
+.btn.ghost{box-shadow:none}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.toolbar input{max-width:280px}
+.toolbar .sp{flex:1}
+.list{display:grid;gap:10px}
+.g{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;border:2px solid var(--ink);border-radius:10px;padding:10px 12px;background:#fffdf8}
+.g.si{background:#eafaf1;border-color:var(--ok)}
+.g.no{background:#fdeeee}
+.g .name{font-weight:700;font-size:17px;word-break:break-word}
+.g .meta{font-size:13px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;margin-top:3px;align-items:center}
+.chip{font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;border:1.5px solid var(--ink);background:#fff}
+.chip.env{background:#e6f1ff} .chip.si{background:var(--ok);color:#fff} .chip.no{background:var(--red);color:#fff} .chip.pend{background:#fff3cd}
+.g .msg{font-size:13px;font-style:italic;margin-top:4px}
+.chk{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:700;color:var(--muted);cursor:pointer}
+.chk input{width:26px;height:26px;accent-color:var(--ok);cursor:pointer}
+.actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.empty{text-align:center;color:var(--muted);padding:26px;font-weight:700}
+details summary{cursor:pointer;font-weight:700}
+details[open] summary{margin-bottom:10px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.hint{font-size:13px;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(100px);background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-weight:700;transition:.3s;z-index:99}
+.toast.show{transform:translateX(-50%) translateY(0)}
+dialog{border:3px solid var(--ink);border-radius:12px;padding:18px;max-width:420px;width:92vw;box-shadow:6px 6px 0 var(--ink)}
+dialog::backdrop{background:rgba(27,35,64,.55)}
+dialog form{display:grid;gap:12px}
+.lock{max-width:380px;margin:12vh auto;text-align:center}
+@media (max-width:720px){
+  form.add{grid-template-columns:1fr 1fr}
+  form.add label:first-child{grid-column:1/3}
+  form.add .btn{grid-column:1/3;justify-content:center}
+  .g{grid-template-columns:auto 1fr}
+  .actions{grid-column:1/3;justify-content:flex-start}
+}
+</style>
+</head>
+<body>
+<header><div class="in">
+  <h1>Panel de invitados <span>Germán &amp; Evelyn</span></h1>
+  <div class="sync" id="sync">💾 Guardado en este dispositivo</div>
+</div></header>
+
+<div id="lock" class="card lock" hidden>
+  <h2>🔒 Acceso al panel</h2>
+  <form id="lockForm" class="row" style="justify-content:center">
+    <input type="password" id="keyIn" placeholder="Clave del panel" required style="max-width:220px">
+    <button class="btn primary">Entrar</button>
+  </form>
+</div>
+
+<main id="app" hidden>
+  <section class="stats" id="stats"></section>
+
+  <section class="card">
+    <h2>➕ Agregar invitado</h2>
+    <form class="add" id="addForm" autocomplete="off">
+      <label>Nombre como aparecerá en la invitación
+        <input id="fNombre" required maxlength="80" placeholder="Ej: Familia Gómez Pérez · Tía Marta">
+      </label>
+      <label>WhatsApp (opcional)
+        <input id="fTel" inputmode="tel" placeholder="300 123 4567">
+      </label>
+      <label>Cupos
+        <input id="fCupos" type="number" min="1" max="20" value="1">
+      </label>
+      <button class="btn primary" type="submit">Agregar</button>
+    </form>
+    <details style="margin-top:14px">
+      <summary>📋 Agregar varios a la vez</summary>
+      <p class="hint" style="margin-bottom:8px">Uno por línea: <b>Nombre, WhatsApp, cupos</b> (WhatsApp y cupos son opcionales).</p>
+      <textarea id="bulk" placeholder="Familia Gómez Pérez, 3001234567, 4&#10;Tía Marta, , 1&#10;Carlos y Ana, 3109876543, 2"></textarea>
+      <div class="row" style="margin-top:8px"><button class="btn gold" id="bulkBtn" type="button">Agregar lista</button></div>
+    </details>
+  </section>
+
+  <section class="card">
+    <h2>👥 Invitados</h2>
+    <div class="toolbar">
+      <input id="search" placeholder="🔎 Buscar…">
+      <select id="filter" style="max-width:200px">
+        <option value="all">Todos</option><option value="pend">Sin enviar</option><option value="env">Enviada, sin respuesta</option>
+        <option value="si">Confirmaron</option><option value="no">No asisten</option>
+      </select>
+      <span class="sp"></span>
+      <button class="btn sm" id="refresh" type="button" hidden>🔄 Actualizar respuestas</button>
+    </div>
+    <div class="list" id="list"></div>
+  </section>
+
+  <section class="card">
+    <details>
+      <summary>✉️ Mensaje de WhatsApp</summary>
+      <p class="hint" style="margin-bottom:8px"><b>{nombre}</b> y <b>{enlace}</b> se reemplazan automáticamente. Deja el enlace solo en su línea para que WhatsApp muestre la vista previa.</p>
+      <textarea id="tpl" style="min-height:150px"></textarea>
+      <div class="row" style="margin-top:8px"><button class="btn sm" id="tplReset" type="button">Restaurar mensaje original</button></div>
+    </details>
+  </section>
+
+  <section class="card">
+    <details>
+      <summary>🗂️ Copias de seguridad y exportar</summary>
+      <div class="row">
+        <button class="btn sm" id="csv" type="button">⬇️ Exportar a Excel (CSV)</button>
+        <button class="btn sm" id="bak" type="button">💾 Descargar copia (JSON)</button>
+        <label class="btn sm" style="flex-direction:row">📂 Restaurar copia<input type="file" id="imp" accept=".json" hidden></label>
+      </div>
+      <p class="hint" style="margin-top:10px" id="modeHint"></p>
+    </details>
+  </section>
+</main>
+
+<dialog id="edit">
+  <form method="dialog" id="editForm">
+    <h2 style="font:400 22px Bangers">✏️ Editar invitado</h2>
+    <label>Nombre<input id="eNombre" required maxlength="80"></label>
+    <label>WhatsApp<input id="eTel" inputmode="tel"></label>
+    <label>Cupos<input id="eCupos" type="number" min="1" max="20"></label>
+    <label>Respuesta
+      <select id="eRsvp"><option value="">Sin respuesta</option><option value="si">Sí asiste</option><option value="no">No asiste</option></select>
+    </label>
+    <label>Personas que asisten<input id="eAsis" type="number" min="0" max="20"></label>
+    <div class="row" style="justify-content:space-between">
+      <button class="btn ghost" value="cancel" formnovalidate>Cancelar</button>
+      <button class="btn primary" value="ok">Guardar</button>
+    </div>
+  </form>
+</dialog>
+<div class="toast" id="toast"></div>
+
+<script src="config.js"></script>
+<script>
+(function(){
+const C = window.CONFIG || {};
+const LS = 'ge_invitados_v1', LS_TPL = 'ge_tpl_v1', LS_KEY = 'ge_admin_key';
+const $ = s => document.querySelector(s);
+let guests = [];
+let adminKey = '';
+
+/* ---------------- Utilidades ---------------- */
+const uid = () => Math.random().toString(36).slice(2,8) + Date.now().toString(36).slice(-3);
+const esc = s => String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const get = (k,d) => { try{ const v=localStorage.getItem(k); return v===null?d:v; }catch{ return d; } };
+const set = (k,v) => { try{ localStorage.setItem(k,v); }catch{} };
+function toast(t){ const el=$('#toast'); el.textContent=t; el.classList.add('show'); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('show'),2200); }
+function phone(t){
+  let d = String(t||'').replace(/\D/g,'');
+  if (!d) return '';
+  if (d.length===10 && d.startsWith('3')) d = '57'+d;   // celular colombiano sin indicativo
+  return d;
+}
+function siteBase(){
+  if (C.SITE_URL) return C.SITE_URL.replace(/\/?$/,'/');
+  return new URL('./', location.href).href;
+}
+function linkFor(g){
+  const u = new URL(siteBase());
+  u.searchParams.set('para', g.nombre);
+  if (g.cupos) u.searchParams.set('cupos', g.cupos);
+  u.searchParams.set('id', g.id);
+  return u.href;
+}
+function message(g){
+  const tpl = get(LS_TPL, C.MENSAJE_WHATSAPP || '{enlace}');
+  return tpl.replaceAll('{nombre}', g.nombre).replaceAll('{enlace}', linkFor(g));
+}
+function waURL(g){
+  const p = phone(g.telefono);
+  return (p ? `https://wa.me/${p}` : 'https://wa.me/') + '?text=' + encodeURIComponent(message(g));
+}
+
+/* ---------------- Almacenamiento ---------------- */
+function saveLocal(){ set(LS, JSON.stringify(guests)); }
+function loadLocal(){ try{ guests = JSON.parse(get(LS,'[]')) || []; }catch{ guests=[]; } }
+
+async function api(payload){
+  if (!C.SHEETS_URL) return null;
+  setSync('⏳ Sincronizando…');
+  try{
+    const r = await fetch(C.SHEETS_URL, { method:'POST', body: JSON.stringify({ ...payload, key: adminKey }) });
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error || 'Error');
+    setSync('☁️ Sincronizado con Google Sheets');
+    return j;
+  }catch(e){
+    setSync('⚠️ Sin conexión con la hoja — guardado local');
+    return null;
+  }
+}
+async function pull(){
+  if (!C.SHEETS_URL) return;
+  const j = await api({ action:'list' });
+  if (j && Array.isArray(j.guests)){
+    // La hoja manda; se conservan los que solo existan localmente (y se suben)
+    const remote = new Map(j.guests.map(g=>[g.id,g]));
+    const onlyLocal = guests.filter(g=>!remote.has(g.id));
+    guests = j.guests.map(normalize).concat(onlyLocal);
+    saveLocal(); render();
+    for (const g of onlyLocal) api({ action:'upsert', guest:g });
+  }
+}
+function normalize(g){
+  return {
+    id: String(g.id||uid()), nombre: String(g.nombre||'').trim(), telefono: String(g.telefono||''),
+    cupos: parseInt(g.cupos,10)||1, enviada: g.enviada===true || g.enviada==='TRUE' || g.enviada==='true',
+    enviadaEn: g.enviadaEn||'', rsvp: g.rsvp||'', asistentes: parseInt(g.asistentes,10)||0,
+    mensaje: g.mensaje||'', respondidoEn: g.respondidoEn||'', creado: g.creado||new Date().toISOString()
+  };
+}
+function setSync(t){ $('#sync').textContent = t; }
+
+async function upsert(g, forceRsvp=false){ saveLocal(); render(); await api({ action:'upsert', guest:g, forceRsvp }); }
+async function remove(id){ guests = guests.filter(g=>g.id!==id); saveLocal(); render(); await api({ action:'delete', id }); }
+
+/* ---------------- Interfaz ---------------- */
+function stats(){
+  const t = guests.length, env = guests.filter(g=>g.enviada).length;
+  const si = guests.filter(g=>g.rsvp==='si'), no = guests.filter(g=>g.rsvp==='no').length;
+  const cup = guests.reduce((a,g)=>a+(g.cupos||0),0);
+  const pers = si.reduce((a,g)=>a+(g.asistentes||g.cupos||1),0);
+  $('#stats').innerHTML = `
+    <div class="stat"><b>${t}</b><small>Invitaciones</small></div>
+    <div class="stat"><b>${cup}</b><small>Cupos totales</small></div>
+    <div class="stat"><b>${env}</b><small>Enviadas</small></div>
+    <div class="stat ok"><b>${si.length}</b><small>Confirmaron</small></div>
+    <div class="stat gold"><b>${pers}</b><small>Personas confirmadas</small></div>
+    <div class="stat no"><b>${no}</b><small>No asisten</small></div>
+    <div class="stat"><b>${t - si.length - no}</b><small>Sin respuesta</small></div>`;
+}
+function status(g){
+  if (g.rsvp==='si') return 'si'; if (g.rsvp==='no') return 'no';
+  return g.enviada ? 'env' : 'pend';
+}
+function render(){
+  stats();
+  const q = $('#search').value.trim().toLowerCase(), f = $('#filter').value;
+  const rows = guests
+    .filter(g => !q || g.nombre.toLowerCase().includes(q) || (g.telefono||'').includes(q))
+    .filter(g => f==='all' || status(g)===f)
+    .sort((a,b)=> a.nombre.localeCompare(b.nombre,'es'));
+  if (!rows.length){ $('#list').innerHTML = `<div class="empty">${guests.length?'Nadie coincide con la búsqueda.':'Aún no hay invitados. ¡Agrega el primero arriba! 💌'}</div>`; return; }
+  $('#list').innerHTML = rows.map(g=>{
+    const st = status(g);
+    const chip = {pend:'<span class="chip pend">Sin enviar</span>', env:'<span class="chip env">Enviada · esperando respuesta</span>',
+                  si:`<span class="chip si">✅ Confirmó${g.asistentes?` · ${g.asistentes} pers.`:''}</span>`, no:'<span class="chip no">No asiste</span>'}[st];
+    return `<div class="g ${st==='si'?'si':st==='no'?'no':''}" data-id="${g.id}">
+      <label class="chk" title="Marcar como confirmado"><input type="checkbox" data-act="confirm" ${g.rsvp==='si'?'checked':''}>Confirmó</label>
+      <div>
+        <div class="name">${esc(g.nombre)}</div>
+        <div class="meta">${chip}<span>🎟️ ${g.cupos} cupo${g.cupos>1?'s':''}</span>${g.telefono?`<span>📱 ${esc(g.telefono)}</span>`:''}</div>
+        ${g.mensaje?`<div class="msg">💬 “${esc(g.mensaje)}”</div>`:''}
+      </div>
+      <div class="actions">
+        <button class="btn wa sm" data-act="send">💬 ${g.enviada?'Reenviar':'Enviar'}</button>
+        <button class="btn sm" data-act="copy" title="Copiar enlace">🔗</button>
+        <a class="btn sm" href="${esc(linkFor(g))}" target="_blank" rel="noopener" title="Ver invitación">👁️</a>
+        <button class="btn sm" data-act="edit" title="Editar">✏️</button>
+        <button class="btn sm" data-act="del" title="Eliminar">🗑️</button>
+      </div></div>`;
+  }).join('');
+}
+
+$('#list').addEventListener('click', async e=>{
+  const el = e.target.closest('[data-act]'); if (!el) return;
+  const id = el.closest('.g').dataset.id, g = guests.find(x=>x.id===id); if (!g) return;
+  const act = el.dataset.act;
+  if (act==='send'){
+    window.open(waURL(g), '_blank');
+    g.enviada = true; g.enviadaEn = new Date().toISOString(); upsert(g);
+  } else if (act==='copy'){
+    try{ await navigator.clipboard.writeText(message(g)); toast('Mensaje con enlace copiado 📋'); }
+    catch{ prompt('Copia el enlace:', linkFor(g)); }
+  } else if (act==='edit'){
+    openEdit(g);
+  } else if (act==='del'){
+    if (confirm(`¿Eliminar a "${g.nombre}"?`)) remove(id);
+  }
+});
+$('#list').addEventListener('change', e=>{
+  if (e.target.dataset.act!=='confirm') return;
+  const g = guests.find(x=>x.id===e.target.closest('.g').dataset.id);
+  if (e.target.checked){ g.rsvp='si'; if(!g.asistentes) g.asistentes=g.cupos; g.respondidoEn=new Date().toISOString(); }
+  else { g.rsvp=''; g.asistentes=0; }
+  upsert(g, true);
+});
+
+function addGuest(nombre, tel, cupos){
+  nombre = String(nombre||'').trim(); if (!nombre) return null;
+  const g = normalize({ id:uid(), nombre, telefono:String(tel||'').trim(), cupos: Math.max(1, parseInt(cupos,10)||1) });
+  guests.push(g); return g;
+}
+$('#addForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  const g = addGuest($('#fNombre').value, $('#fTel').value, $('#fCupos').value);
+  if (g){ upsert(g); toast(`${g.nombre} agregado ✨`); }
+  e.target.reset(); $('#fCupos').value=1; $('#fNombre').focus();
+});
+$('#bulkBtn').onclick = async ()=>{
+  const lines = $('#bulk').value.split('\n').map(l=>l.trim()).filter(Boolean);
+  const added = [];
+  for (const l of lines){ const [n,t,c] = l.split(/[,;\t]/).map(s=>s.trim()); const g = addGuest(n,t,c); if (g) added.push(g); }
+  saveLocal(); render(); $('#bulk').value=''; toast(`${added.length} invitados agregados`);
+  for (const g of added) await api({ action:'upsert', guest:g });
+};
+
+const dlg = $('#edit'); let editing = null;
+function openEdit(g){
+  editing = g; $('#eNombre').value=g.nombre; $('#eTel').value=g.telefono; $('#eCupos').value=g.cupos;
+  $('#eRsvp').value=g.rsvp||''; $('#eAsis').value=g.asistentes||0; dlg.showModal();
+}
+dlg.addEventListener('close', ()=>{
+  if (dlg.returnValue!=='ok' || !editing) return;
+  Object.assign(editing, { nombre:$('#eNombre').value.trim()||editing.nombre, telefono:$('#eTel').value.trim(),
+    cupos:Math.max(1,parseInt($('#eCupos').value,10)||1), rsvp:$('#eRsvp').value, asistentes:parseInt($('#eAsis').value,10)||0 });
+  upsert(editing, true); editing=null;
+});
+
+$('#search').oninput = render; $('#filter').onchange = render;
+$('#refresh').onclick = async ()=>{ await pull(); toast('Respuestas actualizadas'); };
+
+// Plantilla
+$('#tpl').value = get(LS_TPL, C.MENSAJE_WHATSAPP);
+$('#tpl').oninput = e => set(LS_TPL, e.target.value);
+$('#tplReset').onclick = ()=>{ $('#tpl').value = C.MENSAJE_WHATSAPP; set(LS_TPL, C.MENSAJE_WHATSAPP); toast('Mensaje restaurado'); };
+
+// Exportar / importar
+function download(name, text, type){ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type})); a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); }
+$('#csv').onclick = ()=>{
+  const head = ['Nombre','WhatsApp','Cupos','Enviada','Respuesta','Personas que asisten','Mensaje','Enlace'];
+  const q = v => `"${String(v??'').replace(/"/g,'""')}"`;
+  const rows = guests.map(g=>[g.nombre,g.telefono,g.cupos,g.enviada?'Sí':'No',g.rsvp==='si'?'Asiste':g.rsvp==='no'?'No asiste':'Pendiente',g.asistentes,g.mensaje,linkFor(g)].map(q).join(';'));
+  download('invitados-german-evelyn.csv', '﻿'+[head.map(q).join(';'),...rows].join('\n'), 'text/csv;charset=utf-8');
+};
+$('#bak').onclick = ()=> download('copia-invitados.json', JSON.stringify(guests,null,2), 'application/json');
+$('#imp').onchange = async e=>{
+  const f = e.target.files[0]; if (!f) return;
+  try{
+    const arr = JSON.parse(await f.text()); if (!Array.isArray(arr)) throw 0;
+    if (!confirm(`¿Restaurar ${arr.length} invitados? Se reemplazará la lista actual de este dispositivo.`)) return;
+    guests = arr.map(normalize); saveLocal(); render(); toast('Copia restaurada');
+    for (const g of guests) await api({ action:'upsert', guest:g, forceRsvp:true });
+  }catch{ alert('El archivo no es una copia válida.'); }
+  e.target.value='';
+};
+
+/* ---------------- Inicio ---------------- */
+function start(){
+  $('#lock').hidden = true; $('#app').hidden = false;
+  loadLocal(); render();
+  if (C.SHEETS_URL){
+    $('#refresh').hidden = false;
+    $('#modeHint').innerHTML = 'Los invitados y las confirmaciones se guardan en tu hoja de Google. Las respuestas que los invitados envían desde la invitación aparecen aquí al pulsar <b>Actualizar respuestas</b>.';
+    pull(); setInterval(pull, 60000);
+  } else {
+    $('#modeHint').innerHTML = 'Modo local: la lista vive solo en este navegador. Descarga copias con frecuencia. Para registrar confirmaciones automáticamente y usar el panel desde varios dispositivos, conecta Google Sheets (ver README).';
+  }
+}
+async function tryKey(k){
+  adminKey = k;
+  const j = await api({ action:'list' });
+  return !!(j && Array.isArray(j.guests));
+}
+(async ()=>{
+  if (!C.SHEETS_URL) return start();
+  // Con Google Sheets, la clave se valida contra la hoja (no se guarda en el código)
+  const saved = get(LS_KEY,'');
+  if (saved && await tryKey(saved)) return start();
+  $('#lock').hidden = false;
+  $('#lockForm').onsubmit = async e=>{
+    e.preventDefault();
+    if (await tryKey($('#keyIn').value)){ set(LS_KEY, adminKey); start(); }
+    else toast('Clave incorrecta o sin conexión con la hoja');
+  };
+})();
+})();
+</script>
+</body>
+</html>
