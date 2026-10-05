@@ -35,7 +35,7 @@
   --sky:#8fd3e8;
   --pink:#f5a3ad;
   --night:#1b2340;
-  --leaf-w: min(92vw, calc((100svh - 96px) * .66), 520px);
+  --leaf-w: min(92vw, calc((100svh - 150px) * .66), 520px);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 [hidden]{display:none!important}
@@ -56,7 +56,8 @@ body{
 
 /* ================= LIBRO ================= */
 .book{
-  width:var(--leaf-w); aspect-ratio: 2 / 3;
+  width:var(--leaf-w);
+  height:clamp(calc(var(--leaf-w) * 1.5), calc(100svh - 150px), calc(var(--leaf-w) * 1.78));
   position:relative; perspective: 2200px;
 }
 .book::before{ /* bordes de hojas apiladas */
@@ -65,7 +66,7 @@ body{
   box-shadow:0 18px 40px rgba(0,0,0,.45);
 }
 .leaf{
-  position:absolute; inset:0; transform-origin:left center;
+  position:absolute; inset:0; transform-origin:left center; container-type:size;
   transform-style:preserve-3d;
   transition: transform .95s cubic-bezier(.45,.05,.25,1);
 }
@@ -82,7 +83,7 @@ body{
 }
 .face.back span{font-family:"Great Vibes",cursive; font-size:calc(var(--leaf-w) * .16); color:rgba(29,26,43,.12)}
 .page{
-  container-type:inline-size;
+  container-type:inline-size; /* el padding usa el ancho del libro (.leaf); el contenido, el de la página */
   background:
     radial-gradient(rgba(29,26,43,.07) .9px, transparent 1.2px) 0 0/7px 7px,
     var(--paper);
@@ -150,6 +151,8 @@ h2.title{
   position:relative;
 }
 .polaroid img{width:100%; display:block; aspect-ratio:4/3; object-fit:cover}
+.polaroid.inset{position:absolute; z-index:2; padding:1.2cqi 1.2cqi 4cqi}
+.polaroid.inset small{font-size:3.6cqi; bottom:.6cqi}
 .polaroid small{position:absolute; bottom:1.2cqi; left:0; right:0; text-align:center; font:400 4.4cqi "Great Vibes"; color:var(--ink)}
 .tape{position:absolute; top:-2cqi; left:35%; width:30%; height:4.5cqi; background:rgba(244,196,67,.75); transform:rotate(-4deg)}
 .next-hint{
@@ -159,23 +162,55 @@ h2.title{
 /* ================= PORTADA ================= */
 .cover{
   background:
-    radial-gradient(rgba(0,0,0,.18) 1px, transparent 1.5px) 0 0/8px 8px,
-    repeating-conic-gradient(from 0deg at 50% 45%, #e0353c 0 7deg, #c8222a 7deg 14deg);
-  color:#fff; align-items:center; text-align:center; justify-content:space-between;
+    radial-gradient(rgba(0,0,0,.2) 1px, transparent 1.5px) 0 0/8px 8px,
+    repeating-conic-gradient(from 0deg at 50% 52%, #e0353c 0 7deg, #c8222a 7deg 14deg);
+  color:#fff; padding:4cqi 4.5cqi 3.5cqi; gap:2cqi; border:.9cqi solid var(--ink);
 }
-.cover .kicker{font-family:"Bangers"; font-size:5cqi; letter-spacing:.12em; background:var(--ink); padding:1cqi 3cqi; transform:rotate(-2deg)}
-.cover .names{font-family:"Great Vibes",cursive; font-size:13.5cqi; line-height:.9; text-shadow:.6cqi .6cqi 0 var(--ink), 0 0 3cqi rgba(0,0,0,.4)}
-.cover .names b{display:block; font-family:"Bangers"; font-size:8cqi; font-weight:400; color:var(--gold); -webkit-text-stroke:.4cqi var(--ink); paint-order:stroke fill; margin:1cqi 0}
-.cover .photo{width:56%; transform:rotate(-3deg)}
-.cover .photo img{aspect-ratio:4/4.6}
-.cover .for{
-  background:#fff; color:var(--ink); border:.7cqi solid var(--ink); box-shadow:1.2cqi 1.2cqi 0 var(--ink);
-  padding:1.6cqi 4cqi; font-weight:700; font-size:3.8cqi; transform:rotate(1.5deg); max-width:92%;
-}
-.cover .for strong{display:block; font-family:"Great Vibes"; font-size:8cqi; font-weight:400; color:var(--red); line-height:1.05}
-.cover .open{font-family:"Bangers"; font-size:5cqi; letter-spacing:.08em; color:var(--gold); animation:nudge 1.3s ease-in-out infinite}
-@keyframes nudge{50%{transform:translateX(2cqi)}}
-.skip{background:none; border:0; color:#fff; font:700 3.2cqi "Comic Neue"; text-decoration:underline; opacity:.85; cursor:pointer}
+.c-top{display:flex; align-items:center; gap:2cqi}
+.c-issue{flex:none; background:var(--gold); color:var(--ink); border:.6cqi solid var(--ink); box-shadow:.8cqi .8cqi 0 var(--ink);
+  font:400 3.6cqi/1.05 "Bangers"; text-align:center; padding:1cqi 1.6cqi; letter-spacing:.03em}
+.c-banner{flex:1; background:var(--ink); font:400 3.5cqi/1.15 "Bangers"; letter-spacing:.07em; padding:1.3cqi 2.4cqi}
+.c-price{flex:none; width:15cqi; aspect-ratio:1; border-radius:50%; background:#fff6e2; color:var(--ink); border:.6cqi solid var(--ink);
+  display:grid; place-content:center; text-align:center; font:400 2.8cqi/1 "Bangers"; transform:rotate(8deg)}
+.c-price b{display:block; font-weight:400; font-size:4.6cqi; color:var(--red)}
+.c-names{font:400 14.5cqi/.88 "Bangers"; text-align:center; letter-spacing:.02em; color:var(--gold);
+  -webkit-text-stroke:.7cqi var(--ink); paint-order:stroke fill; text-shadow:1.4cqi 1.4cqi 0 var(--ink); transform:rotate(-2deg); margin:1cqi 0 0}
+.c-names span{display:block; font:700 8cqi/1 "Kalam"; color:#fff6e2; -webkit-text-stroke:.45cqi var(--ink); text-shadow:.8cqi .8cqi 0 var(--ink); margin:-.5cqi 0}
+.c-photo{position:relative; flex:1 1 auto; min-height:0; display:flex; justify-content:center; padding:2cqi 0 0}
+.c-photo .polaroid{height:100%; aspect-ratio:.86; transform:rotate(-3deg); background:#fff6e2; border:.5cqi solid var(--ink);
+  padding:2cqi 2cqi 9cqi; box-shadow:1.6cqi 1.6cqi 0 var(--ink)}
+.c-photo .polaroid img{height:100%; aspect-ratio:auto; object-position:50% 30%; border:.4cqi solid var(--ink)}
+.c-photo .polaroid::after{content:""; position:absolute; inset:2cqi 2cqi 9cqi; pointer-events:none; mix-blend-mode:multiply; opacity:.22;
+  background:radial-gradient(#000 .8px, transparent 1.2px) 0 0/5px 5px}
+.c-photo .polaroid small{font:700 6cqi/1 "Kalam"; bottom:2cqi; color:var(--ink)}
+.c-photo .tape{top:-2.6cqi; height:5cqi}
+.c-bubble{position:absolute; right:-1cqi; top:0; background:#fff6e2; color:var(--ink); border:.6cqi solid var(--ink); border-radius:50%;
+  padding:3cqi 4cqi; font:400 4.8cqi/1 "Bangers"; text-align:center; letter-spacing:.03em; transform:rotate(6deg); z-index:3}
+.c-bubble::after{content:""; position:absolute; left:16%; bottom:-3.4cqi; width:4.5cqi; height:5cqi; background:#fff6e2;
+  border-left:.6cqi solid var(--ink); border-bottom:.6cqi solid var(--ink); transform:skewY(-35deg)}
+.c-burst{position:absolute; left:-2cqi; bottom:6cqi; width:30cqi; aspect-ratio:1; z-index:3; display:grid; place-content:center; text-align:center;
+  color:var(--ink); font:400 3.8cqi/1 "Bangers"; letter-spacing:.03em; transform:rotate(-8deg)}
+.c-burst::before,.c-burst::after{content:""; position:absolute; inset:0; z-index:-1;
+  clip-path:polygon(50% 0,59% 18%,78% 7%,76% 28%,97% 27%,85% 44%,100% 58%,80% 65%,88% 86%,67% 81%,58% 100%,46% 83%,28% 95%,27% 74%,4% 75%,16% 57%,0 42%,20% 35%,12% 13%,34% 20%)}
+.c-burst::before{background:var(--ink); transform:translate(1cqi,1cqi)}
+.c-burst::after{background:var(--gold); inset:.6cqi}
+.c-burst b{display:block; font-weight:400; font-size:9cqi; color:var(--red); -webkit-text-stroke:.3cqi var(--ink); paint-order:stroke fill}
+.c-burst small{font-size:2.8cqi}
+.cover .for{align-self:center; background:#fff6e2; color:var(--ink); border:.6cqi solid var(--ink); box-shadow:1.2cqi 1.2cqi 0 var(--ink);
+  padding:1.2cqi 4cqi 1.4cqi; font:400 3.4cqi "Kalam"; transform:rotate(-1deg); width:84%; margin-top:-5cqi; position:relative; z-index:4}
+.cover .for strong{display:block; font:700 6.4cqi/1.05 "Kalam"; color:var(--red); word-break:break-word}
+.c-open{align-self:center; display:flex; align-items:center; gap:3cqi; background:var(--gold); color:var(--ink); border:.7cqi solid var(--ink);
+  border-radius:3cqi; box-shadow:1.4cqi 1.4cqi 0 var(--ink); padding:2cqi 6cqi; font:400 6.4cqi/1 "Bangers"; letter-spacing:.06em; cursor:pointer}
+.c-open:active{transform:translate(.8cqi,.8cqi); box-shadow:.6cqi .6cqi 0 var(--ink)}
+.c-open i{font-style:normal; display:inline-block; animation:nudge 1.3s ease-in-out infinite}
+.c-open small{display:block; font:700 2.8cqi "Comic Neue"; letter-spacing:0; margin-top:.6cqi}
+@keyframes nudge{50%{transform:translateX(1.5cqi)}}
+.c-foot{display:flex; align-items:flex-end; justify-content:space-between; gap:2cqi}
+.skip{background:none; border:0; color:#fff; font:700 3.3cqi "Comic Neue"; text-decoration:underline; cursor:pointer; padding:0}
+.barcode{background:#fff; border:.4cqi solid var(--ink); padding:1cqi 1.4cqi .6cqi; text-align:center; color:var(--ink)}
+.barcode i{display:block; width:20cqi; height:5cqi;
+  background:repeating-linear-gradient(90deg,#1d1a2b 0 2px,transparent 2px 3px,#1d1a2b 3px 4px,transparent 4px 7px,#1d1a2b 7px 10px,transparent 10px 11px)}
+.barcode span{font:700 2.4cqi "Comic Neue"; letter-spacing:.12em}
 
 /* ================= ESCENAS SVG ================= */
 .is-current .route{stroke-dasharray:6 7; animation:dash 1.2s linear infinite}
@@ -257,6 +292,19 @@ h2.title{
 .circle-photo img{width:100%; height:100%; object-fit:cover; object-position:50% 20%}
 
 /* ================= CONTROLES ================= */
+.dock{width:var(--leaf-w); display:flex; flex-direction:column; gap:10px; align-items:center}
+.player{width:100%; display:flex; align-items:center; gap:10px; background:rgba(255,255,255,.08); border:2px solid rgba(255,255,255,.18);
+  border-radius:999px; padding:5px 6px 5px 5px; color:#fff; font:700 13px "Comic Neue"}
+.pbtn{flex:none; width:38px; height:38px; border-radius:50%; border:3px solid var(--ink); background:var(--red); color:#fff; font:400 15px/1 system-ui;
+  box-shadow:2px 2px 0 #000; cursor:pointer; display:grid; place-items:center; padding-left:2px}
+.pbtn.playing{padding-left:0}
+.track{position:relative; flex:1; height:10px; border-radius:999px; background:rgba(255,255,255,.22); cursor:pointer; touch-action:none}
+.track .fill{position:absolute; inset:0 auto 0 0; width:0; border-radius:999px; background:var(--gold)}
+.track .ticks i{position:absolute; top:-2px; width:2px; height:14px; margin-left:-1px; border-radius:2px; background:#fff; opacity:.55}
+.time{flex:none; min-width:34px; text-align:right; font-variant-numeric:tabular-nums}
+.auto{flex:none; border:2px solid rgba(255,255,255,.5); background:transparent; color:#fff; border-radius:999px; padding:5px 10px;
+  font:400 14px "Bangers"; letter-spacing:.08em; cursor:pointer}
+.auto.on{background:var(--gold); color:var(--ink); border-color:var(--ink)}
 .controls{display:flex; align-items:center; gap:16px; color:#fff; font:700 15px "Comic Neue"}
 .nav{
   width:46px; height:46px; border-radius:50%; border:3px solid var(--ink); background:var(--gold);
@@ -266,11 +314,6 @@ h2.title{
 .dots-ind{display:flex; gap:6px}
 .dots-ind i{width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.3); transition:.3s}
 .dots-ind i.on{background:var(--gold); width:20px; border-radius:6px}
-.audio-btn{
-  position:fixed; top:calc(10px + env(safe-area-inset-top)); right:10px; z-index:50; display:none;
-  border:3px solid var(--ink); background:#fff; border-radius:999px; padding:7px 14px; font:700 14px "Comic Neue";
-  box-shadow:3px 3px 0 #000; cursor:pointer;
-}
 @media (prefers-reduced-motion: reduce){ .leaf{transition-duration:.01s} *{animation:none!important} }
 </style>
 </head>
@@ -325,20 +368,30 @@ h2.title{
   </defs>
 </svg>
 
-<button class="audio-btn" id="audioBtn" type="button">🎧 Escuchar nuestra historia</button>
-<audio id="audio" preload="none"></audio>
+<audio id="audio" preload="metadata"></audio>
 
 <main class="stage">
   <div class="book" id="book" aria-live="polite">
 
     <!-- 0 · PORTADA -->
     <section class="leaf"><div class="face front page cover">
-      <div class="kicker">UNA HISTORIETA DE AMOR · EDICIÓN ÚNICA</div>
-      <div class="names">Germán<b>&amp;</b>Evelyn</div>
-      <div class="polaroid photo"><div class="tape"></div><img src="assets/fotos/selfie-juntos.jpg" alt="Germán y Evelyn"><small>Nuestra historia</small></div>
+      <div class="c-top">
+        <div class="c-issue">VOL. 1<br>N.º 1</div>
+        <div class="c-banner">UNA HISTORIETA DE AMOR · EDICIÓN ÚNICA</div>
+        <div class="c-price">PRECIO<b>UN SÍ</b></div>
+      </div>
+      <h1 class="c-names">GERMÁN<span>&amp;</span>EVELYN</h1>
+      <div class="c-photo">
+        <div class="polaroid"><div class="tape"></div><img src="assets/fotos/selfie-juntos.jpg" alt="Germán y Evelyn"><small>Nuestra historia</small></div>
+        <div class="c-bubble">¡NOS<br>CASAMOS!</div>
+        <div class="c-burst"><b class="js-day">24</b><span class="js-month">OCT · 2026</span><small class="js-city">COPACABANA</small></div>
+      </div>
       <div class="for">Ejemplar especial para<strong class="js-name">ti</strong></div>
-      <div class="open">ABRE EL LIBRO ➜</div>
-      <button class="skip" type="button" data-goto="last-2">Ir directo a la invitación</button>
+      <button class="c-open" type="button" id="openBook">ABRE EL LIBRO <i>➜</i></button>
+      <div class="c-foot">
+        <button class="skip" type="button" data-goto>Ir directo a la invitación</button>
+        <div class="barcode" aria-hidden="true"><i></i><span class="js-barcode">24·10·2026</span></div>
+      </div>
     </div><div class="face back"><span>G&amp;E</span></div></section>
 
     <!-- 1 · EL ORIGEN -->
@@ -368,7 +421,7 @@ h2.title{
       </div>
       <div style="display:grid; grid-template-columns:1fr 34%; gap:3cqi; align-items:center">
         <div class="caption">Hace 8 años, Medellín y Apartadó estaban a más de 300 kilómetros… pero el destino decidió recortar el camino, y de repente la distancia entre nosotros se volvió <b style="color:var(--red)">cero</b>.</div>
-        <div class="polaroid" style="transform:rotate(4deg)"><div class="tape"></div><img src="assets/fotos/2018-nosotros.jpg" alt="Germán y Evelyn en 2018"><small>sept · 2018</small></div>
+        <div class="polaroid" style="transform:rotate(4deg)"><div class="tape"></div><img src="assets/ilustraciones/cap1-2018.jpg" alt="Germán y Evelyn en 2018"><small>sept · 2018</small></div>
       </div>
       <span class="pagenum">1</span>
     </div><div class="face back"><span>G&amp;E</span></div></section>
@@ -376,7 +429,7 @@ h2.title{
     <!-- 2 · LA AKT 110 -->
     <section class="leaf"><div class="face front page">
       <div class="chapter"><span class="tag">CAPÍTULO 2</span><h2 class="title">La AKT 110 roja</h2></div>
-      <div class="panel" style="flex:1 1 auto; min-height:0">
+      <div class="panel" style="flex:1 1 auto; min-height:0; max-height:62cqi">
         <svg viewBox="0 0 400 260" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Germán y Evelyn en la moto roja">
           <defs><linearGradient id="sky1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7cc8e6"/><stop offset="1" stop-color="#ffe7b0"/></linearGradient></defs>
           <rect x="-200" y="-300" width="800" height="400" fill="#7cc8e6"/><rect width="400" height="260" fill="url(#sky1)"/><rect x="-200" y="196" width="800" height="400" fill="#3c3c4a"/>
@@ -403,6 +456,8 @@ h2.title{
         </svg>
         <div class="burst" style="width:30cqi; height:22cqi; top:3cqi; left:3cqi; font-size:6cqi">BRRRUM!</div>
       </div>
+      <div class="panel dots" style="flex:1 1 auto; min-height:22cqi"><img src="assets/ilustraciones/cap2-mirador.jpg" alt="Germán y Evelyn en un mirador" style="object-position:50% 45%">
+        <div class="bubble" style="right:3cqi; top:3cqi; max-width:50%">¡Kilómetros y kilómetros juntos! 🛣️</div></div>
       <div class="caption white"><span class="who">GERMÁN:</span>Montados en la AKT 110 roja empezamos a recorrer un camino juntos. No siempre fue fácil: nos tocó enlazar costumbres, acoplar dos familias, entender nuestras diferencias y construir día a día nuestro propio hogar.</div>
       <span class="pagenum">2</span>
     </div><div class="face back"><span>G&amp;E</span></div></section>
@@ -410,9 +465,10 @@ h2.title{
     <!-- 3 · DOS MUNDOS -->
     <section class="leaf"><div class="face front page">
       <div class="chapter"><span class="tag">CAPÍTULO 3</span><h2 class="title">Dos mundos, un hogar</h2></div>
-      <div class="panel dots" style="flex:1 1 auto; min-height:0">
-        <img src="assets/fotos/bar-noche.jpg" alt="Germán y Evelyn de salida" style="object-position:50% 40%">
-        <div class="bubble" style="right:3cqi; top:3cqi">¡Paisa + urabaense = combo perfecto!</div>
+      <div style="flex:1 1 auto; min-height:0; display:grid; grid-template-columns:1fr 1fr; gap:3cqi">
+        <div class="panel dots"><img src="assets/ilustraciones/cap3-gorra-roja.jpg" alt="Germán y Evelyn sonriendo" style="object-position:45% 40%">
+          <div class="bubble" style="left:2.5cqi; bottom:3cqi; max-width:88%; font-size:3.4cqi">¡Paisa + urabaense = combo perfecto!</div></div>
+        <div class="panel dots"><img src="assets/ilustraciones/cap3-jardin.jpg" alt="Evelyn y Germán en un jardín" style="object-position:58% 40%"></div>
       </div>
       <div class="panel versus">
         <div class="col"><h4>Medellín</h4><span>🏔️ Montañas</span><span>🧥 Fresquito</span><span>🫘 Frijolitos</span></div>
@@ -427,7 +483,7 @@ h2.title{
     <section class="leaf"><div class="face front page">
       <div class="chapter"><span class="tag">CAPÍTULO 4</span><h2 class="title">La gran noticia</h2></div>
       <div class="panel dots" style="flex:1 1 auto; min-height:0">
-        <img src="assets/fotos/esperando.jpg" alt="Evelyn y Germán esperando a su bebé" style="object-position:50% 45%">
+        <img src="assets/ilustraciones/cap4-esperando.jpg" alt="Evelyn y Germán esperando a su bebé" style="object-position:60% 55%">
         <div class="burst" style="width:40cqi; height:28cqi; top:4cqi; left:3cqi; font-size:6.4cqi">¡SORPRESA!</div>
         <div class="bubble" style="right:4cqi; bottom:6cqi; max-width:52%">¡Vamos a ser tres! 💛</div>
       </div>
@@ -438,10 +494,10 @@ h2.title{
     <!-- 5 · NUESTRO TESORO -->
     <section class="leaf"><div class="face front page">
       <div class="chapter"><span class="tag">CAPÍTULO 5</span><h2 class="title">Nuestro tesoro</h2></div>
-      <div style="flex:1 1 auto; min-height:0; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1.25fr; gap:3cqi">
-        <div class="panel dots" style="grid-column:1/3"><img src="assets/fotos/finca-familia.jpg" alt="Familia en la finca" style="object-position:50% 35%"></div>
-        <div class="panel dots"><img src="assets/fotos/escaleras-flores.jpg" alt="Familia bajo las flores" style="object-position:50% 70%"></div>
-        <div class="panel dots"><img src="assets/fotos/familia-elegante.jpg" alt="Familia en una celebración" style="object-position:50% 30%"></div>
+      <div style="flex:1 1 auto; min-height:0; display:grid; grid-template-rows:1.15fr 1fr; gap:3cqi">
+        <div class="panel dots"><img src="assets/ilustraciones/cap5-finca.jpg" alt="Familia en la finca con el bebé" style="object-position:50% 40%"></div>
+        <div class="panel dots"><img src="assets/ilustraciones/cap5-escaleras.jpg" alt="Familia sentada bajo las flores" style="object-position:50% 78%">
+          <div class="bubble" style="right:3cqi; top:3cqi; max-width:50%">¡Bienvenido, campeón! 💛</div></div>
       </div>
       <div class="caption">Y llegó él, nuestro mayor tesoro, a llenarlo todo de risas. Dos familias se volvieron una sola. 👨‍👩‍👦</div>
       <span class="pagenum">5</span>
@@ -450,11 +506,12 @@ h2.title{
     <!-- 6 · CRECIENDO JUNTOS -->
     <section class="leaf"><div class="face front page">
       <div class="chapter"><span class="tag">CAPÍTULO 6</span><h2 class="title">Creciendo juntos</h2></div>
-      <div style="flex:1 1 auto; min-height:0; display:grid; grid-template-rows:1.1fr 1fr; gap:3cqi">
-        <div class="panel dots"><img src="assets/fotos/navidad.jpg" alt="Navidad en familia" style="object-position:50% 25%">
-          <div class="burst" style="width:26cqi; height:20cqi; right:2cqi; bottom:2cqi; font-size:4.6cqi">¡JO JO JO!</div></div>
-        <div class="panel dots"><img src="assets/fotos/hijo-sonrisa.jpg" alt="Familia junto a la moto" style="object-position:50% 40%">
-          <div class="bubble" style="left:3cqi; top:3cqi; max-width:58%">¡La moto roja ya tiene copiloto nuevo! 🏍️</div></div>
+      <div style="flex:1 1 auto; min-height:0; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1.15fr 1fr; gap:3cqi">
+        <div class="panel dots" style="grid-column:1/3"><img src="assets/ilustraciones/cap6-moto.jpg" alt="Familia junto a la moto" style="object-position:50% 35%">
+          <div class="bubble" style="left:3cqi; top:3cqi; max-width:52%">¡La moto roja ya tiene copiloto nuevo! 🏍️</div></div>
+        <div class="panel dots"><img src="assets/ilustraciones/cap6-noche.jpg" alt="Familia de noche" style="object-position:45% 40%"></div>
+        <div class="panel dots"><img src="assets/ilustraciones/cap6-restaurante.jpg" alt="Familia haciendo caras chistosas" style="object-position:40% 65%">
+          <div class="burst" style="width:22cqi; height:16cqi; right:1cqi; top:1cqi; font-size:3.8cqi">¡JAJA!</div></div>
       </div>
       <div class="caption">Navidades, madrugadas, aprendizajes y mucho amor: cada día construyendo nuestro propio hogar.</div>
       <span class="pagenum">6</span>
@@ -523,7 +580,7 @@ h2.title{
     <!-- 9 · CONFIRMACIÓN -->
     <section class="leaf"><div class="face front page formal" style="justify-content:center">
       <div class="frame"></div>
-      <div class="circle-photo"><img src="assets/fotos/familia-elegante.jpg" alt="Germán, Evelyn y su hijo"></div>
+      <div class="circle-photo"><img src="assets/ilustraciones/cap6-noche.jpg" alt="Germán, Evelyn y su hijo" style="object-position:50% 45%"></div>
       <h2 class="title" style="font-size:9cqi">¿Nos acompañas?</h2>
       <div class="rsvp-box">
         <div class="cupos js-cupos" hidden></div>
@@ -542,11 +599,19 @@ h2.title{
 
   </div>
 
-  <nav class="controls" aria-label="Pasar páginas">
-    <button class="nav" id="prev" type="button" aria-label="Página anterior">‹</button>
-    <div class="dots-ind" id="dots"></div>
-    <button class="nav" id="next" type="button" aria-label="Página siguiente">›</button>
-  </nav>
+  <div class="dock">
+    <div class="player" id="player" hidden>
+      <button class="pbtn" id="playBtn" type="button" aria-label="Reproducir narración">▶</button>
+      <div class="track" id="track" role="slider" aria-label="Avance de la narración" tabindex="0"><div class="fill" id="fill"></div><div class="ticks" id="ticks"></div></div>
+      <span class="time" id="time">0:00</span>
+      <button class="auto on" id="autoBtn" type="button" aria-pressed="true" title="Pasar las páginas según la narración">AUTO</button>
+    </div>
+    <nav class="controls" aria-label="Pasar páginas">
+      <button class="nav" id="prev" type="button" aria-label="Página anterior">‹</button>
+      <div class="dots-ind" id="dots"></div>
+      <button class="nav" id="next" type="button" aria-label="Página siguiente">›</button>
+    </nav>
+  </div>
 </main>
 
 <script src="config.js"></script>
@@ -596,10 +661,24 @@ h2.title{
   }
   tick(); setInterval(tick, 30000);
 
+  /* ---------- Portada: fecha desde la configuración ---------- */
+  (function(){
+    const d = new Date(C.FECHA_ISO);
+    const meses = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+    const p2 = n => String(n).padStart(2,'0');
+    const dd = d.getDate(), mm = d.getMonth(), yy = d.getFullYear();
+    if (!isNaN(dd)){
+      $('.js-day').textContent = dd;
+      $('.js-month').textContent = `${meses[mm]} · ${yy}`;
+      $('.js-barcode').textContent = `${p2(dd)}·${p2(mm+1)}·${yy}`;
+    }
+    $('.js-city').textContent = String(C.CEREMONIA_CIUDAD||'').split(',')[0].toUpperCase();
+  })();
+
   /* ---------- Libro ---------- */
   const leaves = [...document.querySelectorAll('.leaf')];
   const N = leaves.length;
-  let cur = 0, busy = false;
+  let cur = 0, busy = false, pending = null;
   const dots = $('#dots');
   leaves.forEach(()=> dots.appendChild(document.createElement('i')));
 
@@ -611,9 +690,8 @@ h2.title{
     [...dots.children].forEach((d,i)=>d.classList.toggle('on', i===cur));
     $('#prev').disabled = cur===0; $('#next').disabled = cur===N-1;
   }
-  function go(target){
-    target = Math.max(0, Math.min(N-1, target));
-    if (busy || target===cur) return;
+  // Pasa UNA hoja con animación
+  function flip(target){
     const fwd = target > cur;
     const lf = fwd ? leaves[cur] : leaves[cur-1];
     busy = true;
@@ -622,26 +700,144 @@ h2.title{
     void lf.offsetWidth;
     lf.classList.add('turning');
     lf.classList.toggle('flipped', fwd);
+    let finished = false;
     const done = () => {
+      if (finished) return; finished = true;
       lf.removeEventListener('transitionend', done);
       lf.classList.remove('turning');
       if (fwd) lf.classList.add('gone');
       cur += fwd ? 1 : -1;
       layout(); busy = false;
-      if (cur !== target) go(target);
+      if (pending !== null){ const t = pending; pending = null; show(t); }
     };
     lf.addEventListener('transitionend', done);
-    setTimeout(()=>{ if (busy && lf.classList.contains('turning')) done(); }, 1300);
+    setTimeout(done, 1300);
   }
-  // Salto rápido sin animación (para "ir directo")
+  // Salto sin animación
   function jump(target){
     leaves.forEach((lf,i)=>{ lf.classList.toggle('flipped', i<target); lf.classList.toggle('gone', i<target); });
     cur = target; layout();
   }
-  $('#next').onclick = ()=>go(cur+1);
-  $('#prev').onclick = ()=>go(cur-1);
-  document.querySelector('[data-goto]').onclick = e => { e.stopPropagation(); jump(N-2); };
-  addEventListener('keydown', e=>{ if(e.key==='ArrowRight') go(cur+1); if(e.key==='ArrowLeft') go(cur-1); });
+  // Muestra una página: animada si es la vecina, salto si está lejos
+  function show(target){
+    target = Math.max(0, Math.min(N-1, target));
+    if (target === cur) return;
+    if (busy){ pending = target; return; }
+    if (Math.abs(target - cur) === 1) flip(target); else jump(target);
+  }
+
+  /* ---------- Narración sincronizada ---------- */
+  const audio = $('#audio');
+  // CUES[i] = segundo en que empieza la página i+1 (capítulo 1 … 7, luego la invitación)
+  const CUES = (Array.isArray(C.AUDIO_CUES) && C.AUDIO_CUES.length) ? C.AUDIO_CUES : [0, 17.6, 33.2, 43.6, 49.9, 57.2, 64.8, 74.0];
+  const INVITE = CUES.length;          // página de la invitación formal
+  let hasAudio = !!C.AUDIO_NARRACION, started = false, auto = true;
+
+  const pageAt = t => { let p = 1; CUES.forEach((c,i)=>{ if (t >= c) p = i+1; }); return p; };
+  const fmt = t => { t = Math.max(0, t|0); return `${Math.floor(t/60)}:${String(t%60).padStart(2,'0')}`; };
+
+  function setPlayIcon(){
+    const b = $('#playBtn'), playing = !audio.paused && !audio.ended;
+    b.textContent = audio.ended ? '↺' : playing ? '❚❚' : '▶';
+    b.classList.toggle('playing', playing);
+    b.setAttribute('aria-label', playing ? 'Pausar narración' : 'Reproducir narración');
+  }
+  function drawTicks(){
+    const d = audio.duration; if (!isFinite(d) || !d) return;
+    $('#ticks').innerHTML = CUES.map(c=>`<i style="left:${(c/d*100).toFixed(2)}%"></i>`).join('');
+  }
+  function play(){
+    started = true;
+    const pr = audio.play();
+    if (pr && pr.catch) pr.catch(()=>setPlayIcon());
+  }
+  // Lleva el audio al inicio del capítulo de la página p (navegación manual)
+  function syncAudioTo(p){
+    if (!hasAudio || !auto || !started) return;
+    if (p === 0){ audio.pause(); audio.currentTime = 0; return; }
+    if (p < INVITE){ audio.currentTime = CUES[p-1] + 0.05; }
+    else if (audio.currentTime < CUES[INVITE-1]) audio.currentTime = CUES[INVITE-1];
+  }
+  function userGo(p){
+    p = Math.max(0, Math.min(N-1, p));
+    if (p === cur) return;
+    show(p); syncAudioTo(p);
+  }
+
+  if (hasAudio){
+    audio.src = C.AUDIO_NARRACION;
+    $('#player').hidden = false;
+    audio.addEventListener('loadedmetadata', drawTicks);
+    audio.addEventListener('error', ()=>{ hasAudio = false; $('#player').hidden = true; });
+    audio.addEventListener('play', setPlayIcon);
+    audio.addEventListener('pause', setPlayIcon);
+    audio.addEventListener('ended', setPlayIcon);
+    audio.addEventListener('timeupdate', ()=>{
+      const t = audio.currentTime, d = audio.duration;
+      if (isFinite(d) && d) $('#fill').style.width = (t/d*100) + '%';
+      $('#time').textContent = fmt(t);
+      // Al terminar la narración la música queda más suave para leer
+      const target = t > CUES[INVITE-1] + 1 ? 0.45 : 1;
+      audio.volume += (target - audio.volume) * 0.25;
+      if (auto && started && cur !== 0){
+        const p = pageAt(t);
+        // En la invitación/confirmación el invitado lee a su ritmo
+        if (p !== cur && !(p === INVITE && cur > INVITE)) show(p);
+      }
+    });
+    $('#playBtn').onclick = ()=>{
+      if (audio.ended){ audio.currentTime = 0; }
+      if (audio.paused){
+        if (!started && cur === 0){ openBook(); return; }
+        if (auto && cur > 0 && cur < INVITE && pageAt(audio.currentTime) !== cur) audio.currentTime = CUES[cur-1] + 0.05;
+        play();
+      } else audio.pause();
+    };
+    $('#autoBtn').onclick = e=>{
+      auto = !auto;
+      e.currentTarget.classList.toggle('on', auto);
+      e.currentTarget.setAttribute('aria-pressed', auto);
+      if (auto && started && !audio.paused) show(pageAt(audio.currentTime));
+    };
+    // Barra de avance: tocar o arrastrar para moverse en la narración
+    const track = $('#track');
+    const seek = ev => {
+      const r = track.getBoundingClientRect(), d = audio.duration;
+      if (!isFinite(d) || !d) return;
+      audio.currentTime = Math.max(0, Math.min(1, (ev.clientX - r.left)/r.width)) * d;
+      started = true;
+      if (auto) show(pageAt(audio.currentTime));
+    };
+    let dragging = false;
+    track.addEventListener('pointerdown', e=>{ dragging = true; track.setPointerCapture(e.pointerId); seek(e); });
+    track.addEventListener('pointermove', e=>{ if (dragging) seek(e); });
+    track.addEventListener('pointerup', ()=>{ dragging = false; if (audio.paused && !audio.ended) play(); });
+    track.addEventListener('keydown', e=>{
+      if (e.key==='ArrowRight'){ audio.currentTime += 5; e.preventDefault(); }
+      if (e.key==='ArrowLeft'){ audio.currentTime -= 5; e.preventDefault(); }
+    });
+  }
+
+  function openBook(){
+    if (hasAudio){ audio.currentTime = 0; play(); }
+    show(1);
+  }
+  $('#openBook').onclick = e => { e.stopPropagation(); openBook(); };
+  document.querySelector('[data-goto]').onclick = e => {
+    e.stopPropagation();
+    show(INVITE);
+    if (hasAudio && auto && started) syncAudioTo(INVITE);
+  };
+  leaves[0].addEventListener('click', e=>{ if (cur===0 && !e.target.closest('button')) openBook(); });
+
+  $('#next').onclick = ()=> cur===0 ? openBook() : userGo(cur+1);
+  $('#prev').onclick = ()=> userGo(cur-1);
+  addEventListener('keydown', e=>{
+    if (e.target.closest('input,textarea,select,#track')) return;
+    if (e.key==='ArrowRight') cur===0 ? openBook() : userGo(cur+1);
+    if (e.key==='ArrowLeft') userGo(cur-1);
+    if (e.key===' ' && hasAudio){ e.preventDefault(); $('#playBtn').click(); }
+  });
   // Gestos
   let sx=null, sy=null;
   const book = $('#book');
@@ -649,20 +845,12 @@ h2.title{
   book.addEventListener('touchend', e=>{
     if (sx===null) return;
     const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
-    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)*1.3) go(cur + (dx<0?1:-1));
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)*1.3){
+      if (dx<0) cur===0 ? openBook() : userGo(cur+1); else userGo(cur-1);
+    }
     sx=null;
   }, {passive:true});
-  // Tocar la portada la abre
-  leaves[0].addEventListener('click', e=>{ if (cur===0 && !e.target.closest('button')) go(1); });
   layout();
-
-  /* ---------- Audio opcional ---------- */
-  if (C.AUDIO_NARRACION){
-    const a = $('#audio'), b = $('#audioBtn');
-    a.src = C.AUDIO_NARRACION; b.style.display='block';
-    b.onclick = ()=>{ if (a.paused){ a.play(); b.textContent='⏸️ Pausar narración'; } else { a.pause(); b.textContent='🎧 Escuchar nuestra historia'; } };
-    a.onended = ()=> b.textContent='🎧 Escuchar de nuevo';
-  }
 
   /* ---------- Confirmación ---------- */
   const key = 'rsvp_' + (id || nombre || 'anon');

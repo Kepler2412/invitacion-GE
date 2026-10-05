@@ -8,7 +8,7 @@ Invitación digital tipo **libro-historieta**: el invitado pasa las hojas (boton
 | `admin.html` | Panel para registrar invitados, enviarles la invitación por WhatsApp y ver quién confirmó |
 | `config.js` | **El único archivo que hay que editar**: fechas, lugares, números, textos |
 | `google-apps-script/Code.gs` | Backend gratuito (Google Sheets) para registrar las confirmaciones |
-| `assets/` | Fotos, tipografías, imagen de vista previa (`og-image.jpg`) y favicon |
+| `assets/` | Ilustraciones por capítulo, foto de portada, audio, tipografías, imagen de vista previa (`og-image.jpg`) y favicon |
 
 ## 1. Publicar en GitHub Pages
 
@@ -55,8 +55,14 @@ Las confirmaciones quedan guardadas solas y el panel funciona desde cualquier di
 
 > Si cambias el `Code.gs` después, usa *Gestionar implementaciones → Editar → Nueva versión* para conservar la misma URL.
 
-## 4. Narración con sus voces (opcional)
-Graben el guion, guárdenlo como `assets/audio/narracion.mp3` y pongan `AUDIO_NARRACION: "assets/audio/narracion.mp3"` en `config.js`. Aparece el botón **🎧 Escuchar nuestra historia**.
+## 4. Narración y paso automático de páginas
+- El audio está en `assets/audio/narracion.mp3` (configurado en `config.js → AUDIO_NARRACION`).
+- Al tocar **ABRE EL LIBRO** empieza la narración y las páginas pasan solas siguiendo la voz.
+- Debajo del libro hay un reproductor: ▶/❚❚, barra de avance (se puede tocar o arrastrar; las marcas blancas son los capítulos) y el botón **AUTO**.
+  - **AUTO encendido:** las páginas siguen al audio. Si el invitado se devuelve o adelanta con las flechas o deslizando, el audio salta al inicio de ese capítulo.
+  - **AUTO apagado:** el audio sigue sonando y el invitado pasa las páginas a su ritmo.
+- Al terminar la narración se abre la invitación y la música queda de fondo, más suave.
+- Si cambian la grabación, ajusten los segundos de cada capítulo en `config.js → AUDIO_CUES`.
 
 ## 5. Probar en tu computador
 ```bash
