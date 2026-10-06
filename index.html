@@ -125,6 +125,7 @@ h2.title{
 .caption{
   background:var(--gold); border:.6cqi solid var(--ink); box-shadow:1cqi 1cqi 0 var(--ink);
   padding:2.2cqi 3cqi; font-size:4.1cqi; line-height:1.3; font-weight:700;
+  text-align:justify; hyphens:auto; -webkit-hyphens:auto;
 }
 .caption.white{background:#fff}
 .caption .who{font-family:"Bangers"; font-weight:400; letter-spacing:.05em; color:var(--red); margin-right:1cqi}
@@ -287,6 +288,11 @@ h2.title{
 .result{font-size:4cqi; font-weight:700; padding:2.4cqi 3cqi; border-radius:2.5cqi; border:.5cqi dashed var(--ink); background:#fff; display:none}
 .result.show{display:block}
 .deadline{font-size:3.6cqi; font-weight:700; color:var(--red)}
+.gift{display:grid; grid-template-columns:auto 1fr; gap:2.5cqi; align-items:center; text-align:left; width:92%;
+  background:#fff; border:.5cqi dashed #c9a24a; border-radius:2.5cqi; padding:2cqi 3cqi; position:relative}
+.gift-ico{font-size:9cqi; line-height:1}
+.gift h5{font-family:"Bangers"; font-weight:400; letter-spacing:.05em; font-size:5cqi; color:var(--red)}
+.gift p{font-size:3.5cqi; line-height:1.3; font-weight:700; text-align:justify; hyphens:auto; -webkit-hyphens:auto}
 .thanks{font-family:"Great Vibes"; font-size:8.5cqi; line-height:1.05}
 .circle-photo{width:30cqi; aspect-ratio:1; border-radius:50%; overflow:hidden; border:.8cqi solid #fff; box-shadow:0 0 0 .5cqi #c9a24a, 0 2cqi 4cqi rgba(0,0,0,.25)}
 .circle-photo img{width:100%; height:100%; object-fit:cover; object-position:50% 20%}
@@ -458,7 +464,7 @@ h2.title{
       </div>
       <div class="panel dots" style="flex:1 1 auto; min-height:22cqi"><img src="assets/ilustraciones/cap2-mirador.jpg" alt="Germán y Evelyn en un mirador" style="object-position:50% 45%">
         <div class="bubble" style="right:3cqi; top:3cqi; max-width:50%">¡Kilómetros y kilómetros juntos! 🛣️</div></div>
-      <div class="caption white"><span class="who">GERMÁN:</span>Montados en la AKT 110 roja empezamos a recorrer un camino juntos. No siempre fue fácil: nos tocó enlazar costumbres, acoplar dos familias, entender nuestras diferencias y construir día a día nuestro propio hogar.</div>
+      <div class="caption white">Montados en la AKT 110 roja empezamos a recorrer un camino juntos. No siempre fue fácil: nos tocó enlazar costumbres, acoplar dos familias, entender nuestras diferencias y construir día a día nuestro propio hogar.</div>
       <span class="pagenum">2</span>
     </div><div class="face back"><span>G&amp;E</span></div></section>
 
@@ -475,7 +481,7 @@ h2.title{
         <div class="vs">VS</div>
         <div class="col"><h4>Urabá</h4><span>🌊 Mar</span><span>☀️ Calorcito</span><span>🐟 Pescado y patacón</span></div>
       </div>
-      <div class="caption"><span class="who">EVELYN:</span>Fueron años de aprender a querernos en lo cotidiano, de reírnos de los contrastes, de crecer, emprender y soñar con un futuro en común.</div>
+      <div class="caption">Fueron años de aprender a querernos en lo cotidiano, de reírnos de los contrastes, de crecer, emprender y soñar con un futuro en común.</div>
       <span class="pagenum">3</span>
     </div><div class="face back"><span>G&amp;E</span></div></section>
 
@@ -547,7 +553,7 @@ h2.title{
           <g transform="translate(110 40) rotate(-6)"><rect x="-70" y="-16" width="140" height="30" fill="#fff" stroke="#1d1a2b" stroke-width="2.4"/><text y="7" text-anchor="middle" font-family="Bangers" font-size="20" fill="#d7262e" letter-spacing="1">24 · 10 · 2026</text></g>
         </svg>
       </div>
-      <div class="caption white"><span class="who">GERMÁN:</span>Hoy, cada kilómetro recorrido nos trajo hasta aquí, convencidos de que no hay mejor compañero de viaje para el resto de la vida.</div>
+      <div class="caption white">Hoy, cada kilómetro recorrido nos trajo hasta aquí, convencidos de que no hay mejor compañero de viaje para el resto de la vida.</div>
       <div class="next-hint">CONTINUARÁ… ¡CONTIGO! ➜</div>
       <span class="pagenum">7</span>
     </div><div class="face back"><span>G&amp;E</span></div></section>
@@ -592,6 +598,11 @@ h2.title{
           <button class="btn no" type="button" data-rsvp="no">😢 No podré ir</button>
         </div>
         <div class="result" id="rsvpResult"></div>
+      </div>
+      <div class="gift">
+        <span class="gift-ico" aria-hidden="true">💌</span>
+        <div><h5>Lluvia de sobres</h5>
+        <p>Tu presencia es nuestro mejor regalo. Si deseas tener un detalle con nosotros, tendremos lluvia de sobres.</p></div>
       </div>
       <div class="thanks">Gracias por ser parte de nuestra historia</div>
       <span class="pagenum">9</span>
@@ -728,10 +739,12 @@ h2.title{
 
   /* ---------- Narración sincronizada ---------- */
   const audio = $('#audio');
-  // CUES[i] = segundo en que empieza la página i+1 (capítulo 1 … 7, luego la invitación)
-  const CUES = (Array.isArray(C.AUDIO_CUES) && C.AUDIO_CUES.length) ? C.AUDIO_CUES : [0, 17.6, 33.2, 43.6, 49.9, 57.2, 64.8, 74.0];
-  const INVITE = CUES.length;          // página de la invitación formal
+  // CUES[i] = segundo en que empieza la página i+1 (capítulos 1…7, invitación, confirmación)
+  const CUES = (Array.isArray(C.AUDIO_CUES) && C.AUDIO_CUES.length) ? C.AUDIO_CUES.slice(0, N-1) : [0, 17.6, 33.2, 43.6, 49.9, 57.2, 64.8, 74.0, 92.0];
+  const INVITE = N - 2;                // página de la invitación formal
+  const NARR_END = CUES[INVITE-1] ?? 1e9; // fin de la narración
   let hasAudio = !!C.AUDIO_NARRACION, started = false, auto = true;
+  let holdFinal = false;               // el invitado se movió a mano en las páginas finales
 
   const pageAt = t => { let p = 1; CUES.forEach((c,i)=>{ if (t >= c) p = i+1; }); return p; };
   const fmt = t => { t = Math.max(0, t|0); return `${Math.floor(t/60)}:${String(t%60).padStart(2,'0')}`; };
@@ -755,8 +768,8 @@ h2.title{
   function syncAudioTo(p){
     if (!hasAudio || !auto || !started) return;
     if (p === 0){ audio.pause(); audio.currentTime = 0; return; }
-    if (p < INVITE){ audio.currentTime = CUES[p-1] + 0.05; }
-    else if (audio.currentTime < CUES[INVITE-1]) audio.currentTime = CUES[INVITE-1];
+    if (p < INVITE){ holdFinal = false; audio.currentTime = CUES[p-1] + 0.05; }
+    else { holdFinal = true; if (audio.currentTime < NARR_END) audio.currentTime = NARR_END; }
   }
   function userGo(p){
     p = Math.max(0, Math.min(N-1, p));
@@ -777,12 +790,12 @@ h2.title{
       if (isFinite(d) && d) $('#fill').style.width = (t/d*100) + '%';
       $('#time').textContent = fmt(t);
       // Al terminar la narración la música queda más suave para leer
-      const target = t > CUES[INVITE-1] + 1 ? 0.45 : 1;
+      const target = t > NARR_END + 1 ? 0.45 : 1;
       audio.volume += (target - audio.volume) * 0.25;
-      if (auto && started && cur !== 0){
+      if (auto && started && cur !== 0 && !(holdFinal && cur >= INVITE)){
         const p = pageAt(t);
-        // En la invitación/confirmación el invitado lee a su ritmo
-        if (p !== cur && !(p === INVITE && cur > INVITE)) show(p);
+        // Nunca devolver al invitado desde la confirmación a la invitación
+        if (p !== cur && !(p >= INVITE && p < cur)) show(p);
       }
     });
     $('#playBtn').onclick = ()=>{
@@ -797,7 +810,7 @@ h2.title{
       auto = !auto;
       e.currentTarget.classList.toggle('on', auto);
       e.currentTarget.setAttribute('aria-pressed', auto);
-      if (auto && started && !audio.paused) show(pageAt(audio.currentTime));
+      if (auto && started && !audio.paused){ holdFinal = false; show(pageAt(audio.currentTime)); }
     };
     // Barra de avance: tocar o arrastrar para moverse en la narración
     const track = $('#track');
@@ -805,7 +818,7 @@ h2.title{
       const r = track.getBoundingClientRect(), d = audio.duration;
       if (!isFinite(d) || !d) return;
       audio.currentTime = Math.max(0, Math.min(1, (ev.clientX - r.left)/r.width)) * d;
-      started = true;
+      started = true; holdFinal = false;
       if (auto) show(pageAt(audio.currentTime));
     };
     let dragging = false;

@@ -44,9 +44,10 @@ window.CONFIG = {
   AUDIO_NARRACION: "assets/audio/narracion.mp3",
 
   // Segundo del audio en que empieza cada página:
-  //   [Cap.1, Cap.2, Cap.3, Cap.4, Cap.5, Cap.6, Cap.7, Invitación]
-  // Si cambias la grabación, ajusta estos tiempos.
-  AUDIO_CUES: [0, 17.6, 33.2, 43.6, 49.9, 57.2, 64.8, 74.0],
+  //   [Cap.1, Cap.2, Cap.3, Cap.4, Cap.5, Cap.6, Cap.7, Invitación, Confirmación]
+  // La confirmación aparece unos segundos después de la invitación para dar
+  // tiempo de leerla. Si cambias la grabación, ajusta estos tiempos.
+  AUDIO_CUES: [0, 17.6, 33.2, 43.6, 49.9, 57.2, 64.8, 74.0, 92.0],
 
   // Mensaje que se envía por WhatsApp. {nombre} y {enlace} se reemplazan solos.
   MENSAJE_WHATSAPP:
