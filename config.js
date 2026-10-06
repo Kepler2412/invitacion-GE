@@ -31,8 +31,8 @@ window.CONFIG = {
 
   // URL del Web App de Google Apps Script (ver google-apps-script/Code.gs y README).
   // Si se llena, las confirmaciones quedan registradas automáticamente
-  // y el panel de invitados se sincroniza entre dispositivos.
-  SHEETS_URL: "",
+  // y el panel de invitados se sincroniza entre dispositivos./
+  SHEETS_URL: "https://script.google.com/macros/s/AKfycbwStKR9pQeQb1oH7Ji-E8cvaNA0Qe-u3lkUmdRMrjtTyg_7x_PG9Q5m3JjQ1YglYIMCmg/exec",
 
   // Dirección pública de la invitación (opcional). Si se deja vacía,
   // el panel la calcula solo a partir de la dirección donde está publicado.
